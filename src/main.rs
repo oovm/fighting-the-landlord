@@ -7,18 +7,17 @@ use crate::{
     decks::{ONE_DECK, TWO_DECK},
 };
 use rand::seq::SliceRandom;
-use std::fmt::Write as FmtWrite;
+use std::{fmt::Write as FmtWrite, fs::File, io::Write};
 use time::Instant;
-use std::fs::File;
-use std::io::Write;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let start = Instant::now();
     let mut readme = String::new();
-    if let Ok(o) = one_deck() {
+    const SAMPLES: usize = 100_0000;
+    if let Ok(o) = one_deck(4 * SAMPLES) {
         writeln!(readme, "{}", o)?
     }
-    if let Ok(o) = two_deck() {
+    if let Ok(o) = two_deck(2 * SAMPLES) {
         writeln!(readme, "{}", o)?
     }
     let mut file = File::create("readme.md")?;
@@ -28,12 +27,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn one_deck() -> Result<String, Box<dyn std::error::Error>> {
-    const SAMPLES: usize = 400_0000;
-    let mut cards17 = Data::new(1, SAMPLES * 2);
-    let mut cards18 = Data::new(1, SAMPLES * 3);
-    let mut cards20 = Data::new(1, SAMPLES);
-    for _ in 1..=SAMPLES {
+fn one_deck(samples: usize) -> Result<String, Box<dyn std::error::Error>> {
+    let mut cards17 = Data::new(1, samples * 2);
+    let mut cards18 = Data::new(1, samples * 3);
+    let mut cards20 = Data::new(1, samples);
+    for _ in 1..=samples {
         let mut rng = rand::thread_rng();
         let mut cards = ONE_DECK.to_vec();
         cards.shuffle(&mut rng);
@@ -41,7 +39,7 @@ fn one_deck() -> Result<String, Box<dyn std::error::Error>> {
         cards17.check(&cards[17..34]);
         cards20.check(&cards[34..54]);
     }
-    for _ in 1..=SAMPLES {
+    for _ in 1..=samples {
         let mut rng = rand::thread_rng();
         let mut cards = ONE_DECK.to_vec();
         cards.shuffle(&mut rng);
@@ -61,12 +59,11 @@ fn one_deck() -> Result<String, Box<dyn std::error::Error>> {
     return Ok(out);
 }
 
-fn two_deck() -> Result<String, Box<dyn std::error::Error>> {
-    const SAMPLES: usize = 200_0000;
-    let mut cards25 = Data::new(1, SAMPLES * 3);
-    let mut cards27 = Data::new(1, SAMPLES * 4);
-    let mut cards33 = Data::new(1, SAMPLES);
-    for _ in 1..=SAMPLES {
+fn two_deck(samples: usize) -> Result<String, Box<dyn std::error::Error>> {
+    let mut cards25 = Data::new(2, samples * 3);
+    let mut cards27 = Data::new(2, samples * 4);
+    let mut cards33 = Data::new(2, samples);
+    for _ in 1..=samples {
         let mut rng = rand::thread_rng();
         let mut cards = TWO_DECK.to_vec();
         cards.shuffle(&mut rng);
@@ -75,7 +72,7 @@ fn two_deck() -> Result<String, Box<dyn std::error::Error>> {
         cards25.check(&cards[50..75]);
         cards33.check(&cards[75..108]);
     }
-    for _ in 1..=SAMPLES {
+    for _ in 1..=samples {
         let mut rng = rand::thread_rng();
         let mut cards = TWO_DECK.to_vec();
         cards.shuffle(&mut rng);

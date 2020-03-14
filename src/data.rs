@@ -106,10 +106,13 @@ impl AddAssign<DataCount> for Data {
         else {
             self.has_nuke += 1;
             if rhs.count_miss - 2 != 0 {
+                self.count_miss += (rhs.count_miss - 2) as usize;
+                /* 理论上这里不应该溢出
                 self.has_miss += 1;
                 if rhs.count_miss - 2 > 0 {
                     self.count_miss += (rhs.count_miss - 2) as usize
                 }
+                */
             }
         }
         if rhs.count_solo != 0 {
@@ -134,18 +137,18 @@ impl AddAssign<DataCount> for Data {
 impl Display for Data {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         writeln!(f, "- 总实验数: {}\n", self.samples)?;
-        writeln!(f, "缺牌概率: {:.4} %", self.has_miss as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "缺牌期望: {:.4}", self.count_miss as f64 / self.samples as f64)?;
-        writeln!(f, "单张概率: {:.4} %", self.has_solo as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "单张期望: {:.4}", self.count_solo as f64 / self.samples as f64)?;
-        writeln!(f, "对子概率: {:.4} %", self.has_pair as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "对子期望: {:.4}", self.count_pair as f64 / self.samples as f64)?;
-        writeln!(f, "飞机概率: {:.4} %", self.has_trio as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "飞机期望: {:.4}", self.count_trio as f64 / self.samples as f64)?;
-        writeln!(f, "炸弹概率: {:.4} %", self.has_bomb as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "炸弹期望: {:.4}", self.count_bomb as f64 / self.samples as f64)?;
-        writeln!(f, "王炸概率: {:.4} %", self.has_nuke as f64 / self.samples as f64 * 100.0)?;
-        writeln!(f, "王炸期望: {:.4}", self.has_nuke as f64 / self.samples as f64)?;
+        writeln!(f, "缺牌概率: {:.3} %\n", self.has_miss as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "缺牌期望: {:.4}\n", self.count_miss as f64 / self.samples as f64)?;
+        writeln!(f, "单张概率: {:.3} %\n", self.has_solo as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "单张期望: {:.4}\n", self.count_solo as f64 / self.samples as f64)?;
+        writeln!(f, "对子概率: {:.3} %\n", self.has_pair as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "对子期望: {:.4}\n", self.count_pair as f64 / self.samples as f64)?;
+        writeln!(f, "飞机概率: {:.3} %\n", self.has_trio as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "飞机期望: {:.4}\n", self.count_trio as f64 / self.samples as f64)?;
+        writeln!(f, "炸弹概率: {:.3} %\n", self.has_bomb as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "炸弹期望: {:.4}\n", self.count_bomb as f64 / self.samples as f64)?;
+        writeln!(f, "王炸概率: {:.3} %\n", self.has_nuke as f64 / self.samples as f64 * 100.0)?;
+        writeln!(f, "王炸期望: {:.4}\n", self.has_nuke as f64 / self.samples as f64)?;
         Ok(())
     }
 }
