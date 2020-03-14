@@ -8,12 +8,13 @@ use crate::{
 };
 use rand::seq::SliceRandom;
 use std::{fmt::Write as FmtWrite, fs::File, io::Write};
-use time::Instant;
+// use time::Instant;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let start = Instant::now();
+    // let start = Instant::now();
     let mut readme = String::new();
     const SAMPLES: usize = 100_0000;
+    writeln!(readme, "# 斗地主各牌型概率")?;
     if let Ok(o) = one_deck(4 * SAMPLES) {
         writeln!(readme, "{}", o)?
     }
@@ -22,8 +23,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
     let mut file = File::create("readme.md")?;
     file.write_all(readme.as_bytes())?;
-    let end = Instant::now();
-    println!("finished in {} s", (start - end).as_seconds_f32());
+    // let end = Instant::now();
+    // println!("finished in {} s", (start - end).as_seconds_f32());
     Ok(())
 }
 
@@ -49,12 +50,12 @@ fn one_deck(samples: usize) -> Result<String, Box<dyn std::error::Error>> {
     }
     let mut out = String::new();
     writeln!(out, "###  三人斗地主")?;
-    writeln!(out, "- 地主: 20 张")?;
+    writeln!(out, "地主: 20 张\n")?;
     writeln!(out, "{}", cards20)?;
-    writeln!(out, "- 农民: 17 张")?;
+    writeln!(out, "农民: 17 张\n")?;
     writeln!(out, "{}", cards17)?;
     writeln!(out, "###  三人扑克")?;
-    writeln!(out, "- 均分: 18 张")?;
+    writeln!(out, "均分: 18 张\n")?;
     writeln!(out, "{}", cards18)?;
     return Ok(out);
 }
@@ -83,12 +84,12 @@ fn two_deck(samples: usize) -> Result<String, Box<dyn std::error::Error>> {
     }
     let mut out = String::new();
     writeln!(out, "###  四人斗地主")?;
-    writeln!(out, "- 地主: 33 张")?;
+    writeln!(out, "地主: 33 张\n")?;
     writeln!(out, "{}", cards33)?;
-    writeln!(out, "- 农民: 25 张")?;
+    writeln!(out, "农民: 25 张\n")?;
     writeln!(out, "{}", cards25)?;
     writeln!(out, "###  四人扑克")?;
-    writeln!(out, "- 均分: 27 张")?;
+    writeln!(out, "均分: 27 张\n")?;
     writeln!(out, "{}", cards27)?;
     return Ok(out);
 }
